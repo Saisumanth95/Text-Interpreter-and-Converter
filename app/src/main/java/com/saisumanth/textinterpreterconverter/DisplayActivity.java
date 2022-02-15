@@ -44,6 +44,7 @@ public class DisplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display);
 
 
+
         multitext = findViewById(R.id.file_content);
 
         EditText filename = findViewById(R.id.file_name);
@@ -65,17 +66,19 @@ public class DisplayActivity extends AppCompatActivity {
 
                 progressDialog.show();
 
-                if(filename.getText().toString() == null || filename.getText().toString() == ""){
+                if(filename.getText() == null || filename.getText().toString().isEmpty()){
 
                     Toast.makeText(getApplicationContext(),"Enter file name",Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
 
                     return;
 
                 }
 
-                if(multitext.getText().toString() == null || multitext.getText().toString() == ""){
+                if(multitext.getText() == null || multitext.getText().toString().isEmpty()){
 
                     Toast.makeText(getApplicationContext(),"Enter file content",Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
 
                     return;
 

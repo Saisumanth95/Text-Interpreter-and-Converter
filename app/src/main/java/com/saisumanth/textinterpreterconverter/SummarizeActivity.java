@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -129,6 +130,8 @@ public class SummarizeActivity extends AppCompatActivity {
                             AlertDialog.Builder builder = new AlertDialog.Builder(SummarizeActivity.this);
 
                             builder.setTitle("Summary of " + FilesActivity.items.get(pos).getFilename());
+
+                            builder.setIcon(R.drawable.playstore);
 
                             builder.setMessage(jsonObject.getString("text_summary"));
 

@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            android:background="@drawable/speech"
             app:contentScrim="?attr/colorPrimaryDark"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
@@ -69,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:text="Male voice"
+                    android:textColor="@color/white"
                     android:layout_marginBottom="20dp"
                     android:textAlignment="center"
 
@@ -108,10 +110,11 @@
                 android:clickable="true"
                 app:cardElevation="@dimen/cardview_default_elevation"
                 app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="@color/browser_actions_bg_grey">
+                app:cardBackgroundColor="#ADFA9E">
 
                 <TextView
                     android:id="@+id/pdf_text"
+                    android:text="Loading.."
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -122,15 +125,7 @@
 
             </androidx.cardview.widget.CardView>
 
-            <Button
-                android:id="@+id/edit_file"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="30dp"
-                android:text="Edit File" />
+
 
         </LinearLayout>
 

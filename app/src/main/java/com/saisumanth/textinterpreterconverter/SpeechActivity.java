@@ -62,7 +62,6 @@ public class SpeechActivity extends AppCompatActivity {
 
         mSeekBarPitch = findViewById(R.id.seek_bar_pitch_text);
         mSeekBarSpeed = findViewById(R.id.seek_bar_speed_text);
-        editFileButton = findViewById(R.id.edit_file);
         voiceSwitch = findViewById(R.id.voice_switch);
 
         button.setEnabled(false);

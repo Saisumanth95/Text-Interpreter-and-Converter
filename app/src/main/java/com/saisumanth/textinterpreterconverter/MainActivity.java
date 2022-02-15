@@ -1,5 +1,6 @@
 package com.saisumanth.textinterpreterconverter;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -15,7 +16,6 @@ import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
@@ -27,19 +27,21 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.googlecode.tesseract.android.TessBaseAPI;
-
 import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int PDF_SELECT = 1;
+    private final int PHOTO_SELECT = 2;
+
     private Tessaract tessaract;
-    private Button uploadDoc;
+    private Button uploadDoc,uploadImg;
     private Button convertBtn;
     private Uri pdfUri;
+    public Uri photoUri;
+    public Bitmap photo;
     public static ProgressDialog progressDialog;
-    private int PDF_SELECT = 1;
     public static String TexttoDisplay;
 
     @Override
@@ -54,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        uploadDoc = findViewById(R.id.upload);
+        uploadDoc = findViewById(R.id.upload_doc);
+        uploadImg = findViewById(R.id.upload_img);
         convertBtn = findViewById(R.id.convert);
         convertBtn.setEnabled(false);
         progressDialog = new ProgressDialog(MainActivity.this);
@@ -85,6 +88,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        uploadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(isPermissionRequested(MainActivity.this)){
+
+                    Intent photoPick = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                    startActivityForResult(photoPick,PHOTO_SELECT);
+
+                }else{
+
+                    Toast.makeText(getApplicationContext(),"Permission Required",Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
         convertBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +118,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        convertToText();
+                        if(pdfUri != null){
+
+                            convertToText();
+
+
+                        }else if(photoUri != null){
+
+                            TexttoDisplay = tessaract.getOCRResult(photo);
+
+                        }
+
                         startActivity(new Intent(MainActivity.this,DisplayActivity.class));
 
                     }
@@ -187,6 +219,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show();
+
+        }else if(grantResults[0] == PackageManager.PERMISSION_DENIED){
+            Toast.makeText(this,"Permission Required",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -194,8 +241,21 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==PDF_SELECT && resultCode==RESULT_OK && data!=null && data.getData()!=null){
             pdfUri = data.getData();
             uploadDoc.setText("Document Selected");
+            uploadImg.setEnabled(false);
             convertBtn.setEnabled(true);
 
+        }else if(requestCode==PHOTO_SELECT && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+
+            photoUri = data.getData();
+
+            try {
+                photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            uploadImg.setText("Image Selected");
+            uploadDoc.setEnabled(false);
+            convertBtn.setEnabled(true);
 
         }else{
             Toast.makeText(getApplicationContext(),"Error in selecting pdf or Image",Toast.LENGTH_LONG).show();

@@ -12,9 +12,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,11 +88,56 @@ public class FilesActivity extends AppCompatActivity implements SwipeRefreshLayo
             @Override
             public void onItemClick(int position) {
 
-                Intent intent = new Intent(FilesActivity.this,SelectActivity.class);
+                AlertDialog.Builder alert = new AlertDialog.Builder(FilesActivity.this);
 
-                intent.putExtra("position",position);
+                LayoutInflater inflater = getLayoutInflater();
 
-                startActivity(intent);
+                View view = inflater.inflate(R.layout.buttons, (ViewGroup) findViewById(R.id.root));
+
+                Button summarize = view.findViewById(R.id.view_summerize);
+                Button speech = view.findViewById(R.id.view_speech);
+                Button translate = view.findViewById(R.id.view_translate);
+
+                summarize.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent(FilesActivity.this,SummarizeActivity.class);
+                        intent.putExtra("position",position);
+                        startActivity(intent);
+
+                    }
+                });
+
+                speech.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent(FilesActivity.this,SpeechActivity.class);
+                        intent.putExtra("position",position);
+                        startActivity(intent);
+
+                    }
+                });
+
+                translate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent = new Intent(FilesActivity.this,TranslateActivity.class);
+                        intent.putExtra("position",position);
+                        startActivity(intent);
+
+                    }
+                });
+
+                alert.setTitle("Select any activity");
+
+                alert.setView(view);
+
+                alert.show();
+
+
 
             }
         });

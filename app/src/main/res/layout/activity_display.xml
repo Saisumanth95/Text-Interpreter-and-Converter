@@ -16,13 +16,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:hint="Enter Text" />
+            android:hint="Enter Text"
+            android:padding="15dp"/>
 
         <EditText
             android:id="@+id/file_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:padding="15dp"
             android:hint="Type name of the file"/>
 
         <Button

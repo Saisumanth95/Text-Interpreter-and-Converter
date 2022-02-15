@@ -21,7 +21,6 @@
             android:name=".SummarizeActivity"
             android:exported="false" />
         <activity android:name=".SpeechActivity" />
-        <activity android:name=".SelectActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".DisplayActivity" />
         <activity android:name=".LoginActivity" />

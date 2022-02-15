@@ -164,6 +164,8 @@ public class TranslateActivity extends AppCompatActivity {
 
                 builder.setMessage(s);
 
+                builder.setIcon(R.drawable.playstore);
+
                 Log.d("Test", "onSuccess: " + s);
 
                 builder.setCancelable(true);
