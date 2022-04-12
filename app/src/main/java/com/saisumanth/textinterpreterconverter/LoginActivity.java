@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(provider)
-                        .setLogo(R.drawable.playstore)
+                        .setLogo(R.drawable.common_full_open_on_phone)
                         .setTosAndPrivacyPolicyUrls("https://policies.google.com/terms?hl=en-US","https://policies.google.com/privacy?hl=en-US")
                         .build();
 

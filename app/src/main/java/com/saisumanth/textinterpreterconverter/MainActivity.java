@@ -34,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final int PDF_SELECT = 1;
     private final int PHOTO_SELECT = 2;
+    private String TAG = "Testing";
 
-    private Tessaract tessaract;
+    private MyTessOCR tessaract;
     private Button uploadDoc,uploadImg;
     private Button convertBtn;
     private Uri pdfUri;
@@ -65,14 +66,17 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Converting...");
         progressDialog.setCanceledOnTouchOutside(false);
 
-        tessaract = new Tessaract(MainActivity.this);
+
+        if(isWriteStoragePermissionGranted()) {
+            tessaract = new  MyTessOCR(MainActivity.this);
+        }
         TexttoDisplay = "";
 
         uploadDoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(isPermissionRequested(MainActivity.this)){
+                if(isReadStoragePermissionGranted()){
 
                     Intent intent = new Intent();
                     intent.setType("application/pdf");
@@ -92,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(isPermissionRequested(MainActivity.this)){
+                if(isReadStoragePermissionGranted()){
 
                     Intent photoPick = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -197,26 +201,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public boolean isPermissionRequested(Activity activity){
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-
-            if(ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+    public  boolean isReadStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG,"Permission is granted1");
                 return true;
-            }else{
+            } else {
 
-                ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-
+                Log.v(TAG,"Permission is revoked1");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 return false;
-
             }
-
-        }else{
-
-            return true;
-
         }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG,"Permission is granted1");
+            return true;
+        }
+    }
 
+    public  boolean isWriteStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG,"Permission is granted2");
+                return true;
+            } else {
+
+                Log.v(TAG,"Permission is revoked2");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG,"Permission is granted2");
+            return true;
+        }
     }
 
 
@@ -224,12 +244,24 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if(requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
 
-        }else if(grantResults[0] == PackageManager.PERMISSION_DENIED){
-            Toast.makeText(this,"Permission Required",Toast.LENGTH_SHORT).show();
+            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                Toast.makeText(this, "Permission Required", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(requestCode == 2){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+
+            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                Toast.makeText(this, "Permission Required", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

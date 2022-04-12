@@ -131,7 +131,7 @@ public class SummarizeActivity extends AppCompatActivity {
 
                             builder.setTitle("Summary of " + FilesActivity.items.get(pos).getFilename());
 
-                            builder.setIcon(R.drawable.playstore);
+                            builder.setIcon(R.drawable.common_full_open_on_phone);
 
                             builder.setMessage(jsonObject.getString("text_summary"));
 

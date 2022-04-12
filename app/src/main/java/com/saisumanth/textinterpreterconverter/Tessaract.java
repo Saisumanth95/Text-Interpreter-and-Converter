@@ -13,13 +13,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-class Tessaract {
+class MyTessOCR {
     private String datapath;
     private TessBaseAPI mTess;    Context context;
-    public Tessaract(Context context) {
+    public MyTessOCR(Context context) {
         // TODO Auto-generated constructor stub
         this.context = context;
-        datapath = Environment.getExternalStorageDirectory() + "/ocr/";
+        datapath = Environment.getExternalStorageDirectory() + "/ocrctz/";
         File dir = new File(datapath + "/tessdata/");
         File file = new File(datapath + "/tessdata/" + "eng.traineddata");
         if (!file.exists()) {
@@ -31,6 +31,7 @@ class Tessaract {
         mTess = new TessBaseAPI();
         String language = "eng";
         mTess.init(datapath, language);
+        //Auto only
         mTess.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO_ONLY);
     }
 
